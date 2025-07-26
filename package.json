@@ -1,0 +1,28 @@
+{
+  "type": "module",
+  "name": "csv-stripe-revenue-checker",
+  "version": "1.0.0",
+  "description": "A desktop app to calculate Stripe revenue for specific plans/prices, including refunds and credits.",
+  "author": "Carl <c-dietz@outlook.com>",
+  "main": "main.js",
+  "dependencies": {
+    "electron-store": "^10.1.0",
+    "stripe": "^18.3.0"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.stripechecker",
+    "mac": {
+      "category": "public.app-category.finance",
+      "target": ["dmg", "zip"],
+      "icon": "assets/logo.icns"
+    }
+  },
+  "devDependencies": {
+    "electron": "^37.2.2",
+    "electron-builder": "^26.0.12"
+  }
+}

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Meter Stripe Revenue Checker</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+      margin: 0;
+      background: #f2f8f4;
+      color: #26252c;
+    }
+    .header-bar {
+      background: #fff;
+      color: #26252c;
+      padding: 1.5em 2em 1em 2em;
+      box-shadow: 0 2px 8px rgba(38, 37, 44, 0.08);
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      display: flex;
+      align-items: center;
+      gap: 1.2em;
+    }
+    .header-logo {
+      height: 44px;
+      width: auto;
+      display: block;
+    }
+    .header-bar h1 {
+      margin: 0;
+      font-size: 2.1em;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: #26252c;
+      display: inline-block;
+    }
+    .tabs {
+      display: flex;
+      border-bottom: 1.5px solid #e0e6ed;
+      margin-bottom: 2em;
+      background: #fff;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 2px 8px rgba(38, 37, 44, 0.04);
+      overflow: hidden;
+    }
+    .tab {
+      padding: 1em 2.5em;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 1.1em;
+      color: #26252c;
+      transition: background 0.2s, color 0.2s, border-bottom 0.2s;
+      font-weight: 500;
+      border-bottom: 3px solid transparent;
+    }
+    .tab.active {
+      background: #fff;
+      color: #26252c;
+      font-weight: 600;
+      border-bottom: 3px solid #4cbf20;
+    }
+    .tab:not(.active):hover {
+      background: #f2f8f4;
+      color: #26252c;
+    }
+    .tab-content {
+      display: none;
+      background: #fff;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 2px 8px rgba(38, 37, 44, 0.04);
+      padding: 2em 2em 2em 2em;
+      margin-bottom: 2em;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    label {
+      display: block;
+      margin-top: 1.5em;
+      font-weight: 500;
+      color: #26252c;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.7em;
+      margin-top: 0.3em;
+      border: 1px solid #cfd8dc;
+      border-radius: 6px;
+      font-size: 1em;
+      background: #f2f8f4;
+      color: #26252c;
+      transition: border 0.2s;
+      font-family: 'Poppins', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    }
+    input:focus, textarea:focus {
+      border: 1.5px solid #4cbf20;
+      outline: none;
+      background: #fff;
+    }
+    button {
+      margin-top: 2em;
+      padding: 0.9em 2.5em;
+      background: #4cbf20;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(76, 191, 32, 0.08);
+      transition: background 0.2s;
+      font-family: 'Poppins', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    }
+    button:hover, button:focus {
+      background: #389a18;
+    }
+    #output, #csv-preview {
+      margin-top: 2em;
+      white-space: pre-wrap;
+      background: #f8f8f8;
+      padding: 1.2em;
+      border-radius: 8px;
+      border: 1px solid #e0e6ed;
+      font-size: 1em;
+      color: #26252c;
+      box-shadow: 0 1px 4px rgba(38, 37, 44, 0.03);
+      font-family: 'Poppins', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    }
+    .spinner {
+      display: none;
+      margin: 0 auto 1em auto;
+      width: 32px;
+      height: 32px;
+      border: 4px solid #e0e6ed;
+      border-top: 4px solid #4cbf20;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    .spinner.active {
+      display: block;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>Meter Stripe Revenue Checker</h1>
+  </div>
+  <div class="tabs">
+    <div class="tab" id="tab-instructions">Instructions</div>
+    <div class="tab active" id="tab-batch">Batch CSV</div>
+    <div class="tab" id="tab-single">Single Calculation</div>
+  </div>
+  <div class="tab-content" id="content-instructions">
+    <h2>How to use this thing</h2>
+    <p>
+      Welcome to the Meter Stripe Revenue Checker! This app helps you quickly work out how much revenue you’ve made from specific Stripe plans, prices, or products over any date range you like.
+    </p>
+    <ol>
+      <li>
+        <b>Batch CSV:</b> If you’ve got a list of Stripe IDs and date ranges, head to the Batch CSV tab. Enter your Stripe Secret Key, upload your CSV file (it just needs columns for the Stripe ID, a start date, and an end date – don’t stress about the exact column names, I'llfigure it out), and hit Process. I'lldo the sums for each row and you can download the results, too easy.
+      </li>
+      <li>
+        <b>Single Calculation:</b> Just want to check one plan or price? Go to the Single Calculation tab, pop in your details, and you’ll see the revenue for that period.
+      </li>
+      <li>
+        Your Stripe Secret Key is saved securely on your computer, so you don’t have to keep pasting it in every time.
+      </li>
+      <li>
+        If you run into any issues, double-check your CSV columns or try again.
+      </li>
+    </ol>
+    <p>Cheers for using the app!</p>
+  </div>
+  <div class="tab-content active" id="content-batch">
+    <form id="csv-form">
+      <label>Stripe Secret Key
+        <input type="password" id="csvSecretKey" required />
+      </label>
+      <label>Upload CSV File
+        <input type="file" id="csvFile" accept=".csv" required />
+      </label>
+      <!-- Removed the Process CSV button -->
+    </form>
+    <div class="spinner" id="csv-spinner"></div>
+    <div id="csv-preview"></div>
+    <button id="download-csv" style="display:none;">Download Updated CSV</button>
+  </div>
+  <div class="tab-content" id="content-single">
+    <form id="revenue-form">
+      <label>Stripe Secret Key
+        <input type="password" id="secretKey" required />
+      </label>
+      <label>Plan/Price ID
+        <input type="text" id="planId" required />
+      </label>
+      <label>Date From
+        <input type="date" id="dateFrom" />
+      </label>
+      <label>Date To
+        <input type="date" id="dateTo" />
+      </label>
+      <button type="submit">Check Revenue</button>
+    </form>
+    <div id="output"></div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
+</html> 
